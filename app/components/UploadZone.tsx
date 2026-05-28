@@ -14,7 +14,7 @@ export default function UploadZone({ onFile, disabled, preview }: Props) {
 
   const handleFile = useCallback(
     (file: File) => {
-      if (!file.type.startsWith('image/')) return
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return
       const url = URL.createObjectURL(file)
       onFile(file, url)
     },
@@ -61,7 +61,7 @@ export default function UploadZone({ onFile, disabled, preview }: Props) {
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/webp"
         className="hidden"
         onChange={onInputChange}
         disabled={disabled}

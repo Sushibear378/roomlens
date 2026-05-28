@@ -9,10 +9,13 @@ import { generateDesignAction, type GenerateResult } from '@/app/studio/actions'
 const STYLES = ['Japandi', 'Industrial', 'Boho', 'Scandinavian', 'Mid-Century'] as const
 const ROOM_TYPES = ['Living Room', 'Bedroom', 'Kitchen', 'Office'] as const
 
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const MAX_FILE_BYTES = 10 * 1024 * 1024 // 10 MB
+
 const LOADING_PHASES = [
   { label: 'Uploading photo…', pct: 10 },
   { label: 'Analysing room layout…', pct: 30 },
-  { label: `Applying style…`, pct: 60 },
+  { label: 'Applying style…', pct: 60 },
   { label: 'Matching furniture…', pct: 85 },
   { label: 'Finalising design…', pct: 95 },
 ]
@@ -25,11 +28,10 @@ interface Props {
 
 export default function StudioDashboard({ userId }: Props) {
   const [step, setStep] = useState<Step>('idle')
-  const [file, setFile] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
   const [style, setStyle] = useState<string>(STYLES[0])
   const [roomType, setRoomType] = useState<string>(ROOM_TYPES[0])
-  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null)
+  const [storagePath, setStoragePath] = useState<string | null>(null)
   const [phaseIdx, setPhaseIdx] = useState(0)
   const [result, setResult] = useState<Extract<GenerateResult, { ok: true }>['design'] | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -37,13 +39,24 @@ export default function StudioDashboard({ userId }: Props) {
   const [isPending, startTransition] = useTransition()
 
   const handleFile = useCallback(async (f: File, previewUrl: string) => {
-    setFile(f)
+    if (!ALLOWED_TYPES.includes(f.type)) {
+      setError('Only JPG, PNG, and WEBP images are supported.')
+      setStep('error')
+      return
+    }
+    if (f.size > MAX_FILE_BYTES) {
+      setError('Image must be under 10 MB.')
+      setStep('error')
+      return
+    }
+
     setPreview(previewUrl)
     setStep('uploading')
     setError(null)
 
     const supabase = createClient()
-    const ext = f.name.split('.').pop() ?? 'jpg'
+    const ext = f.name.split('.').pop()?.toLowerCase() ?? 'jpg'
+    // userId is the server-verified id passed down from DashboardPage.
     const path = `${userId}/${crypto.randomUUID()}.${ext}`
 
     const { error: uploadErr } = await supabase.storage
@@ -53,25 +66,23 @@ export default function StudioDashboard({ userId }: Props) {
     if (uploadErr) {
       setError(
         uploadErr.message.includes('Bucket not found')
-          ? 'Storage bucket "room-uploads" not found. Create a public bucket with that name in your Supabase dashboard → Storage.'
+          ? 'Storage bucket "room-uploads" not found. Create it as a private bucket in your Supabase dashboard → Storage.'
           : `Upload failed: ${uploadErr.message}`
       )
       setStep('error')
       return
     }
 
-    const { data: { publicUrl } } = supabase.storage.from('room-uploads').getPublicUrl(path)
-    setUploadedUrl(publicUrl)
+    setStoragePath(path)
     setStep('ready')
   }, [userId])
 
   const handleGenerate = useCallback(() => {
-    if (!uploadedUrl) return
+    if (!storagePath) return
     setStep('generating')
     setError(null)
     setPhaseIdx(0)
 
-    // Advance loading phase labels during the 10s wait
     const timers: ReturnType<typeof setTimeout>[] = []
     LOADING_PHASES.forEach((_, i) => {
       if (i === 0) return
@@ -79,7 +90,7 @@ export default function StudioDashboard({ userId }: Props) {
     })
 
     startTransition(async () => {
-      const res = await generateDesignAction(uploadedUrl, roomType, style)
+      const res = await generateDesignAction(storagePath, roomType, style)
       timers.forEach(clearTimeout)
       if (res.ok) {
         setResult(res.design)
@@ -89,13 +100,12 @@ export default function StudioDashboard({ userId }: Props) {
         setStep('error')
       }
     })
-  }, [uploadedUrl, roomType, style])
+  }, [storagePath, roomType, style])
 
   const handleReset = useCallback(() => {
     setStep('idle')
-    setFile(null)
     setPreview(null)
-    setUploadedUrl(null)
+    setStoragePath(null)
     setResult(null)
     setError(null)
     setPhaseIdx(0)
@@ -127,14 +137,12 @@ export default function StudioDashboard({ userId }: Props) {
       {/* ── Upload + controls (hidden when done) ── */}
       {step !== 'done' && (
         <div className="space-y-4">
-          {/* Upload zone */}
           <UploadZone
             onFile={handleFile}
             disabled={step === 'uploading' || step === 'generating'}
             preview={preview}
           />
 
-          {/* Error */}
           {step === 'error' && error && (
             <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               {error}
@@ -144,7 +152,6 @@ export default function StudioDashboard({ userId }: Props) {
             </div>
           )}
 
-          {/* Controls row */}
           <div className="flex gap-3 flex-wrap">
             <div className="flex-1 min-w-36">
               <label className="block text-xs font-medium text-stone-500 mb-1.5 uppercase tracking-widest">
@@ -189,7 +196,6 @@ export default function StudioDashboard({ userId }: Props) {
             </div>
           </div>
 
-          {/* Generating state */}
           {step === 'generating' && (
             <div className="rounded-2xl border border-stone-100 bg-stone-50 p-6 space-y-4">
               <div className="flex items-center gap-3">
@@ -206,7 +212,6 @@ export default function StudioDashboard({ userId }: Props) {
             </div>
           )}
 
-          {/* Uploading indicator */}
           {step === 'uploading' && (
             <p className="text-sm text-stone-500 flex items-center gap-2">
               <span className="inline-block w-3 h-3 rounded-full border-2 border-stone-400 border-t-stone-700 animate-spin" />
