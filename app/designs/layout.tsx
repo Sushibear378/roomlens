@@ -4,9 +4,7 @@ import Link from 'next/link'
 async function getUser() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ''
-  const configured =
-    url.startsWith('https://') && !url.includes('[') && key.length > 20
-
+  const configured = url.startsWith('https://') && !url.includes('[') && key.length > 20
   if (!configured) return { email: 'dev@placeholder.local' }
 
   const { createClient } = await import('@/lib/supabase/server')
@@ -17,7 +15,7 @@ async function getUser() {
   return user
 }
 
-export default async function StudioLayout({
+export default async function DesignsLayout({
   children,
 }: {
   children: React.ReactNode
@@ -33,9 +31,12 @@ export default async function StudioLayout({
             Roomlens
           </Link>
           <Link
-            href="/designs"
+            href="/studio/dashboard"
             className="text-sm text-stone-500 hover:text-stone-900 transition-colors"
           >
+            Studio
+          </Link>
+          <Link href="/designs" className="text-sm text-stone-800 font-medium">
             My Designs
           </Link>
         </div>
@@ -51,9 +52,7 @@ export default async function StudioLayout({
           </form>
         </div>
       </nav>
-      <main className="flex-1 px-6 py-8 max-w-5xl mx-auto w-full">
-        {children}
-      </main>
+      <main className="flex-1 px-6 py-8 max-w-5xl mx-auto w-full">{children}</main>
     </div>
   )
 }
