@@ -31,7 +31,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 bg-stone-50">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-sm">
         <Link href="/" className="block text-center text-lg font-semibold tracking-tight mb-8">
           Roomlens
@@ -74,7 +74,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-stone-300 transition bg-white"
+                  className="w-full border border-stone-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-stone-300 transition bg-white text-stone-900 placeholder:text-stone-400"
                 />
               </div>
 
