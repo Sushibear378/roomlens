@@ -1,12 +1,10 @@
 'use client'
 
-import type { GenerateResult } from '@/app/studio/actions'
+import type { DesignPayload } from '@/app/studio/actions'
 import DesignSlider from './DesignSlider'
 
-type DesignData = Extract<GenerateResult, { ok: true }>['design']
-
 interface Props {
-  design: DesignData
+  design: DesignPayload
   onReset: () => void
 }
 

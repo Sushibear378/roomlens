@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { resolveImageUrl } from '@/lib/imageUrl'
 import DesignSlider from '@/app/studio/dashboard/DesignSlider'
+import DesignPoller from './DesignPoller'
 
 async function getAuthContext() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''
@@ -74,13 +75,16 @@ export default async function DesignPage({
         </Link>
       </div>
 
-      {/* PROCESSING state */}
+      {/* PROCESSING state — DesignPoller drives checkDesignAction every 3s */}
       {status === 'PROCESSING' && (
-        <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-100 dark:border-stone-800">
-          <div className="w-10 h-10 rounded-full border-2 border-stone-300 dark:border-stone-600 border-t-stone-800 dark:border-t-stone-300 animate-spin mb-4" />
-          <p className="text-stone-700 dark:text-stone-300 font-medium">Design in progress</p>
-          <p className="text-stone-400 text-sm mt-1">This usually takes about a minute</p>
-        </div>
+        <>
+          <DesignPoller designId={id} />
+          <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-100 dark:border-stone-800">
+            <div className="w-10 h-10 rounded-full border-2 border-stone-300 dark:border-stone-600 border-t-stone-800 dark:border-t-stone-300 animate-spin mb-4" />
+            <p className="text-stone-700 dark:text-stone-300 font-medium">Design in progress</p>
+            <p className="text-stone-400 text-sm mt-1">This usually takes 30–90 seconds</p>
+          </div>
+        </>
       )}
 
       {/* FAILED state */}
