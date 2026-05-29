@@ -121,7 +121,7 @@ export default function StudioDashboard({ userId }: Props) {
           <h1 className="text-2xl font-semibold">
             {step === 'done' ? 'Your Design' : 'New Design'}
           </h1>
-          <p className="text-stone-500 text-sm mt-0.5">
+          <p className="text-stone-500 dark:text-stone-400 text-sm mt-0.5">
             {step === 'done'
               ? 'Drag the slider to compare · browse products below'
               : 'Upload a room photo and choose your style'}
@@ -144,7 +144,7 @@ export default function StudioDashboard({ userId }: Props) {
           />
 
           {step === 'error' && error && (
-            <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 px-4 py-3 text-sm text-red-700 dark:text-red-400">
               {error}
               <button onClick={handleReset} className="ml-3 underline underline-offset-2 text-red-600 hover:text-red-800">
                 Try again
@@ -154,14 +154,14 @@ export default function StudioDashboard({ userId }: Props) {
 
           <div className="flex gap-3 flex-wrap">
             <div className="flex-1 min-w-36">
-              <label className="block text-xs font-medium text-stone-500 mb-1.5 uppercase tracking-widest">
+              <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1.5 uppercase tracking-widest">
                 Style
               </label>
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
                 disabled={step !== 'ready' && step !== 'idle'}
-                className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2.5 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-stone-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {STYLES.map((s) => (
                   <option key={s}>{s}</option>
@@ -170,14 +170,14 @@ export default function StudioDashboard({ userId }: Props) {
             </div>
 
             <div className="flex-1 min-w-36">
-              <label className="block text-xs font-medium text-stone-500 mb-1.5 uppercase tracking-widest">
+              <label className="block text-xs font-medium text-stone-500 dark:text-stone-400 mb-1.5 uppercase tracking-widest">
                 Room Type
               </label>
               <select
                 value={roomType}
                 onChange={(e) => setRoomType(e.target.value)}
                 disabled={step !== 'ready' && step !== 'idle'}
-                className="w-full border border-stone-200 rounded-xl px-3 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-stone-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-2.5 text-sm bg-white dark:bg-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-300 dark:focus:ring-stone-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {ROOM_TYPES.map((r) => (
                   <option key={r}>{r}</option>
@@ -189,7 +189,7 @@ export default function StudioDashboard({ userId }: Props) {
               <button
                 onClick={handleGenerate}
                 disabled={step !== 'ready' || isPending}
-                className="bg-stone-900 text-white px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-stone-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+                className="bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-6 py-2.5 rounded-xl font-medium text-sm hover:bg-stone-700 dark:hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
               >
                 Generate Design
               </button>
@@ -197,14 +197,14 @@ export default function StudioDashboard({ userId }: Props) {
           </div>
 
           {step === 'generating' && (
-            <div className="rounded-2xl border border-stone-100 bg-stone-50 p-6 space-y-4">
+            <div className="rounded-2xl border border-stone-100 dark:border-stone-800 bg-stone-50 dark:bg-stone-900/40 p-6 space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-5 h-5 rounded-full border-2 border-stone-300 border-t-stone-800 animate-spin shrink-0" />
-                <p className="text-sm font-medium text-stone-700">{currentPhase.label}</p>
+                <div className="w-5 h-5 rounded-full border-2 border-stone-300 dark:border-stone-600 border-t-stone-800 dark:border-t-stone-300 animate-spin shrink-0" />
+                <p className="text-sm font-medium text-stone-700 dark:text-stone-300">{currentPhase.label}</p>
               </div>
-              <div className="h-1.5 bg-stone-200 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-stone-800 rounded-full transition-all duration-1000"
+                  className="h-full bg-stone-800 dark:bg-stone-300 rounded-full transition-all duration-1000"
                   style={{ width: `${currentPhase.pct}%` }}
                 />
               </div>
@@ -213,8 +213,8 @@ export default function StudioDashboard({ userId }: Props) {
           )}
 
           {step === 'uploading' && (
-            <p className="text-sm text-stone-500 flex items-center gap-2">
-              <span className="inline-block w-3 h-3 rounded-full border-2 border-stone-400 border-t-stone-700 animate-spin" />
+            <p className="text-sm text-stone-500 dark:text-stone-400 flex items-center gap-2">
+              <span className="inline-block w-3 h-3 rounded-full border-2 border-stone-400 dark:border-stone-600 border-t-stone-700 dark:border-t-stone-300 animate-spin" />
               Uploading to storage…
             </p>
           )}

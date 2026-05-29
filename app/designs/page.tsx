@@ -46,12 +46,12 @@ export default async function DesignsPage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-semibold">My Designs</h1>
-        <p className="text-stone-500 text-sm mt-0.5">Your generated room designs</p>
+        <p className="text-stone-500 dark:text-stone-400 text-sm mt-0.5">Your generated room designs</p>
       </div>
 
       {cards.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-stone-100 flex items-center justify-center mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-stone-100 dark:bg-stone-800 flex items-center justify-center mb-4">
             <svg
               className="w-8 h-8 text-stone-400"
               fill="none"
@@ -66,13 +66,13 @@ export default async function DesignsPage() {
               />
             </svg>
           </div>
-          <p className="text-stone-600 font-medium">No designs yet</p>
+          <p className="text-stone-600 dark:text-stone-300 font-medium">No designs yet</p>
           <p className="text-stone-400 text-sm mt-1">
             Generate your first room design to see it here
           </p>
           <Link
             href="/studio/dashboard"
-            className="mt-4 bg-stone-900 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-stone-700 transition-colors"
+            className="mt-4 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-5 py-2 rounded-xl text-sm font-medium hover:bg-stone-700 dark:hover:bg-white transition-colors"
           >
             Create a design
           </Link>
@@ -82,18 +82,18 @@ export default async function DesignsPage() {
           {cards.map((card) => {
             const badge =
               card.status === 'PROCESSING'
-                ? { label: 'Processing', cls: 'bg-amber-100 text-amber-700' }
+                ? { label: 'Processing', cls: 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300' }
                 : card.status === 'FAILED'
-                ? { label: 'Failed', cls: 'bg-red-100 text-red-700' }
+                ? { label: 'Failed', cls: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400' }
                 : null
 
             return (
               <Link
                 key={card.id}
                 href={`/designs/${card.id}`}
-                className="group rounded-2xl border border-stone-100 hover:border-stone-300 overflow-hidden hover:shadow-md transition-all"
+                className="group rounded-2xl border border-stone-100 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-600 overflow-hidden hover:shadow-md transition-all"
               >
-                <div className="aspect-video bg-stone-100 relative overflow-hidden">
+                <div className="aspect-video bg-stone-100 dark:bg-stone-800 relative overflow-hidden">
                   {card.thumbnailUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -115,7 +115,7 @@ export default async function DesignsPage() {
                   )}
                 </div>
                 <div className="p-3">
-                  <p className="text-sm font-medium text-stone-800">
+                  <p className="text-sm font-medium text-stone-800 dark:text-stone-100">
                     {card.style} · {card.roomType}
                   </p>
                   <p className="text-xs text-stone-400 mt-0.5">

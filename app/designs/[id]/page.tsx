@@ -58,7 +58,7 @@ export default async function DesignPage({
           <h1 className="text-2xl font-semibold">
             {roomUpload.style} · {roomUpload.roomType}
           </h1>
-          <p className="text-stone-500 text-sm mt-0.5">
+          <p className="text-stone-500 dark:text-stone-400 text-sm mt-0.5">
             {new Date(design.createdAt).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
@@ -68,7 +68,7 @@ export default async function DesignPage({
         </div>
         <Link
           href="/designs"
-          className="text-sm text-stone-500 hover:text-stone-900 border border-stone-200 px-3 py-1.5 rounded-xl transition-colors hover:border-stone-400"
+          className="text-sm text-stone-500 dark:text-stone-300 hover:text-stone-900 dark:hover:text-stone-100 border border-stone-200 dark:border-stone-700 px-3 py-1.5 rounded-xl transition-colors hover:border-stone-400 dark:hover:border-stone-500"
         >
           ← My Designs
         </Link>
@@ -76,17 +76,17 @@ export default async function DesignPage({
 
       {/* PROCESSING state */}
       {status === 'PROCESSING' && (
-        <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-stone-50 border border-stone-100">
-          <div className="w-10 h-10 rounded-full border-2 border-stone-300 border-t-stone-800 animate-spin mb-4" />
-          <p className="text-stone-700 font-medium">Design in progress</p>
+        <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-100 dark:border-stone-800">
+          <div className="w-10 h-10 rounded-full border-2 border-stone-300 dark:border-stone-600 border-t-stone-800 dark:border-t-stone-300 animate-spin mb-4" />
+          <p className="text-stone-700 dark:text-stone-300 font-medium">Design in progress</p>
           <p className="text-stone-400 text-sm mt-1">This usually takes about a minute</p>
         </div>
       )}
 
       {/* FAILED state */}
       {status === 'FAILED' && (
-        <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-red-50 border border-red-100">
-          <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center mb-4">
+        <div className="flex flex-col items-center justify-center py-24 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50">
+          <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
             <svg
               className="w-5 h-5 text-red-500"
               fill="none"
@@ -101,13 +101,13 @@ export default async function DesignPage({
               />
             </svg>
           </div>
-          <p className="text-red-700 font-medium">Design failed</p>
+          <p className="text-red-700 dark:text-red-400 font-medium">Design failed</p>
           <p className="text-stone-400 text-sm mt-1">
             Something went wrong generating this design
           </p>
           <Link
             href="/studio/dashboard"
-            className="mt-4 text-sm text-stone-600 underline underline-offset-2 hover:text-stone-900"
+            className="mt-4 text-sm text-stone-600 dark:text-stone-400 underline underline-offset-2 hover:text-stone-900 dark:hover:text-stone-100"
           >
             Try again
           </Link>
@@ -134,29 +134,29 @@ export default async function DesignPage({
 
           {/* Right: Shop the Look */}
           <div className="w-72 shrink-0 space-y-3">
-            <h2 className="text-sm font-semibold text-stone-700 uppercase tracking-widest">
+            <h2 className="text-sm font-semibold text-stone-700 dark:text-stone-300 uppercase tracking-widest">
               Shop the Look
             </h2>
             <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
               {matchedProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="flex gap-3 p-3 rounded-xl border border-stone-100"
+                  className="flex gap-3 p-3 rounded-xl border border-stone-100 dark:border-stone-800 dark:bg-white/[0.03]"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-14 h-14 rounded-lg object-cover shrink-0 bg-stone-100"
+                    className="w-14 h-14 rounded-lg object-cover shrink-0 bg-stone-100 dark:bg-stone-800"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-medium text-stone-800 truncate">{product.name}</p>
-                    <p className="text-xs text-stone-500 capitalize mt-0.5">{product.category}</p>
+                    <p className="text-sm font-medium text-stone-800 dark:text-stone-100 truncate">{product.name}</p>
+                    <p className="text-xs text-stone-500 dark:text-stone-400 capitalize mt-0.5">{product.category}</p>
                     <div className="flex items-center justify-between mt-1.5">
-                      <p className="text-sm font-semibold text-stone-900">{product.price}</p>
+                      <p className="text-sm font-semibold text-stone-900 dark:text-stone-100">{product.price}</p>
                       <button
                         disabled
-                        className="text-xs bg-stone-100 text-stone-400 px-2.5 py-1 rounded-lg cursor-not-allowed"
+                        className="text-xs bg-stone-100 dark:bg-stone-800 text-stone-400 dark:text-stone-500 px-2.5 py-1 rounded-lg cursor-not-allowed"
                         aria-label={`Buy ${product.name} — coming soon`}
                       >
                         Buy
