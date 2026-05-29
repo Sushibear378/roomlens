@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
+import DevPasswordLogin from './DevPasswordLogin'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -92,6 +93,7 @@ export default function LoginPage() {
             </form>
           </>
         )}
+        {process.env.NODE_ENV === 'development' && <DevPasswordLogin />}
       </div>
     </main>
   )
